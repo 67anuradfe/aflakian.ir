@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شب سنتور و تار | یک شب موسیقی سنتی ایرانی</title>
+<style>
+  @font-face{
+    font-family:'Vazirmatn';
+    src:url('fonts/Vazirmatn.woff2') format('woff2-variations'), url('fonts/Vazirmatn.woff2') format('woff2');
+    font-weight:100 900;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'Lalezar';
+    src:url('fonts/Lalezar.woff2') format('woff2');
+    font-weight:400;
+    font-display:swap;
+  }
+  :root{
+    --bg-deep:#0E1526;
+    --bg-deep2:#182543;
+    --bg-deep3:#0A0F1D;
+    --turquoise:#2FA79E;
+    --turquoise-soft:#5FC6BC;
+    --gold:#C9A24B;
+    --gold-soft:#E4C87A;
+    --cream:#F3E9D3;
+    --cream-dim:#C9BFA9;
+    --wine:#7B3341;
+    --font-display:'Lalezar', 'Vazirmatn', sans-serif;
+    --font-body:'Vazirmatn', sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-deep);
+    color:var(--cream);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+
+  /* ---------- Decorative repeating arabesque border (SVG data pattern) ---------- */
+  .khatam-divider{
+    width:100%;
+    height:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='68' height='34' viewBox='0 0 68 34'%3E%3Cg fill='none' stroke='%23C9A24B' stroke-width='1.4' opacity='0.55'%3E%3Cpath d='M0 17 Q17 0 34 17 Q51 34 68 17'/%3E%3Ccircle cx='17' cy='8.5' r='2.4'/%3E%3Ccircle cx='51' cy='25.5' r='2.4'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat:repeat-x;
+    background-size:68px 34px;
+    opacity:0.8;
+  }
+
+  /* ---------- Top navigation ---------- */
+  .site-nav{
+    position:fixed;
+    top:0; right:0; left:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px clamp(18px,5vw,56px);
+    background:linear-gradient(180deg, rgba(10,15,29,0.92) 0%, rgba(10,15,29,0.55) 80%, transparent 100%);
+    backdrop-filter:blur(6px);
+  }
+  .brand{
+    font-family:var(--font-display);
+    font-size:clamp(18px,2.4vw,24px);
+    color:var(--gold-soft);
+    letter-spacing:0.5px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .brand-mark{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--turquoise);
+    box-shadow:0 0 12px 3px rgba(47,167,158,0.7);
+  }
+  .nav-links{display:flex; gap:8px; align-items:center;}
+  .nav-link{
+    font-family:var(--font-body);
+    font-weight:500;
+    font-size:15px;
+    color:var(--cream-dim);
+    background:transparent;
+    border:1px solid transparent;
+    padding:8px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .35s ease;
+  }
+  .nav-link:hover, .nav-link.is-active{
+    color:var(--bg-deep3);
+    background:var(--gold-soft);
+    border-color:var(--gold-soft);
+  }
+
+  /* ---------- Page container / SPA sections ---------- */
+  .page{display:none;}
+  .page.active{display:block; animation:fadeIn .6s ease both;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ================= HOME / HERO ================= */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:120px 20px 80px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(47,167,158,0.16), transparent 60%),
+      radial-gradient(ellipse at 20% 90%, rgba(201,162,75,0.12), transparent 55%),
+      linear-gradient(180deg, var(--bg-deep3) 0%, var(--bg-deep) 55%, var(--bg-deep2) 100%);
+  }
+
+  /* santur strings — vertical shimmering lines evoking the struck strings of a santur */
+  .strings{
+    position:absolute; inset:0;
+    display:flex;
+    justify-content:space-between;
+    padding:0 4%;
+    pointer-events:none;
+    opacity:0.5;
+  }
+  .strings span{
+    width:1px;
+    height:100%;
+    background:linear-gradient(180deg, transparent, var(--turquoise-soft) 40%, var(--gold-soft) 60%, transparent);
+    opacity:0.18;
+    animation:stringShimmer 3.6s ease-in-out infinite;
+    transform-origin:center;
+  }
+  @keyframes stringShimmer{
+    0%,100%{opacity:0.12; transform:scaleY(1);}
+    50%{opacity:0.5; transform:scaleY(1.015);}
+  }
+
+  .hero-dome{
+    position:absolute;
+    bottom:-30%;
+    left:50%;
+    transform:translateX(-50%);
+    width:140vw;
+    max-width:1400px;
+    aspect-ratio:2/1;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+    border:1px solid rgba(201,162,75,0.25);
+    box-shadow:0 0 120px 40px rgba(47,167,158,0.06) inset;
+    pointer-events:none;
+  }
+
+  .eyebrow{
+    position:relative;
+    font-size:14px;
+    letter-spacing:2px;
+    color:var(--turquoise-soft);
+    font-weight:500;
+    margin-bottom:22px;
+    opacity:0;
+    animation:riseIn .9s ease .1s forwards;
+  }
+  .hero h1{
+    position:relative;
+    font-family:var(--font-display);
+    font-size:clamp(40px,8vw,84px);
+    line-height:1.25;
+    color:var(--cream);
+    text-shadow:0 0 40px rgba(201,162,75,0.25);
+    opacity:0;
+    animation:riseIn 1s ease .25s forwards;
+  }
+  .hero h1 span{color:var(--gold-soft);}
+  .hero p.lead{
+    position:relative;
+    max-width:640px;
+    margin:26px auto 0;
+    font-size:clamp(15px,2vw,18px);
+    line-height:2;
+    color:var(--cream-dim);
+    opacity:0;
+    animation:riseIn 1s ease .45s forwards;
+  }
+  @keyframes riseIn{from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);}}
+
+  .hero-scroll-cue{
+    position:relative;
+    margin-top:56px;
+    width:22px; height:36px;
+    border:1.5px solid var(--gold-soft);
+    border-radius:12px;
+    opacity:0;
+    animation:riseIn 1s ease .6s forwards;
+  }
+  .hero-scroll-cue::before{
+    content:'';
+    position:absolute;
+    top:6px; left:50%;
+    width:4px; height:4px;
+    background:var(--gold-soft);
+    border-radius:50%;
+    transform:translateX(-50%);
+    animation:scrollDot 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollDot{0%{top:6px; opacity:1;} 80%{top:20px; opacity:0;} 100%{top:6px; opacity:0;}}
+
+  /* ================= POEMS SECTION ================= */
+  .section{
+    padding:90px clamp(18px,6vw,60px);
+    position:relative;
+  }
+  .section-head{text-align:center; max-width:640px; margin:0 auto 56px;}
+  .section-head .eyebrow{margin-bottom:14px; animation:none; opacity:1;}
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:clamp(28px,4.5vw,42px);
+    color:var(--cream);
+  }
+  .section-head p{color:var(--cream-dim); margin-top:14px; line-height:1.9; font-size:15px;}
+
+  .poem-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+    gap:22px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .poem-arch{
+    position:relative;
+    background:linear-gradient(180deg, var(--bg-deep2), var(--bg-deep3));
+    border:1px solid rgba(201,162,75,0.28);
+    border-radius:50% 50% 8px 8px / 40% 40% 8px 8px;
+    padding:46px 18px 30px;
+    text-align:center;
+    cursor:pointer;
+    transition:transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+  }
+  .poem-arch::before{
+    content:'';
+    position:absolute;
+    top:16px; left:50%;
+    transform:translateX(-50%);
+    width:26px; height:26px;
+    border:1px solid var(--turquoise-soft);
+    border-radius:50%;
+    opacity:0.6;
+  }
+  .poem-arch .num{
+    display:block;
+    font-family:var(--font-display);
+    font-size:15px;
+    color:var(--turquoise-soft);
+    margin-bottom:10px;
+  }
+  .poem-arch .label{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:19px;
+    color:var(--cream);
+  }
+  .poem-arch:hover{
+    transform:translateY(-8px);
+    border-color:var(--gold-soft);
+    box-shadow:0 18px 40px -12px rgba(201,162,75,0.35);
+  }
+
+  /* ================= PHOTO FRAMES (group + performers) ================= */
+  .photo-frame{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(160deg, var(--bg-deep2), var(--bg-deep3));
+    border:1px solid rgba(201,162,75,0.3);
+  }
+  .photo-frame img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .photo-frame .placeholder-overlay{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:10px;
+    opacity:0;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(47,167,158,0.14), transparent 60%),
+      linear-gradient(160deg, var(--bg-deep2), var(--bg-deep3));
+    transition:opacity .3s ease;
+  }
+  .photo-frame.img-missing .placeholder-overlay{opacity:1;}
+  .placeholder-overlay svg{width:34px; height:34px; opacity:0.55;}
+  .placeholder-overlay span{
+    font-size:12.5px;
+    color:var(--cream-dim);
+    padding:0 16px;
+    text-align:center;
+    line-height:1.8;
+  }
+
+  .group-photo-frame{
+    max-width:1000px;
+    margin:0 auto;
+    aspect-ratio:16/8;
+    border-radius:20px;
+    box-shadow:0 22px 50px -20px rgba(0,0,0,0.55);
+  }
+  .group-photo-frame .placeholder-overlay span{font-size:14px;}
+
+  .performers-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+    max-width:820px;
+    margin:34px auto 0;
+  }
+  .performer-photo{
+    border-radius:50% 50% 10px 10px / 34% 34% 10px 10px;
+    aspect-ratio:3/4;
+  }
+  .performer-caption{
+    text-align:center;
+    margin-top:12px;
+  }
+  .performer-caption .p-name{
+    display:block;
+    font-size:15px;
+    font-weight:600;
+    color:var(--cream);
+  }
+  .performer-caption .p-role{
+    display:block;
+    font-size:12.5px;
+    color:var(--turquoise-soft);
+    margin-top:3px;
+  }
+
+  /* ================= FOOTER ================= */
+  .site-footer{
+    text-align:center;
+    padding:40px 20px 50px;
+    color:var(--cream-dim);
+    font-size:13px;
+    opacity:0.7;
+  }
+  .footer-content{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+    opacity:1;
+  }
+  .footer-logo{
+    width:42px; height:42px;
+    border-radius:10px;
+    flex-shrink:0;
+  }
+  .footer-logo img{object-fit:contain; background:var(--bg-deep3);}
+  .footer-logo .placeholder-overlay svg{width:16px; height:16px;}
+  .footer-logo .placeholder-overlay span{display:none;}
+  .footer-text{text-align:right;}
+  .footer-text .tagline{margin-bottom:6px;}
+  .footer-text .copyright{font-size:12px; opacity:0.85;}
+  .footer-text .copyright strong{color:var(--gold-soft); font-weight:600;}
+  @media (max-width:480px){
+    .footer-content{flex-direction:column; text-align:center;}
+    .footer-text{text-align:center;}
+  }
+
+  /* ================= POEM DETAIL PAGES ================= */
+  .inner-page{
+    min-height:100vh;
+    padding:130px clamp(18px,6vw,60px) 80px;
+    background:linear-gradient(180deg, var(--bg-deep3), var(--bg-deep) 40%);
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:var(--turquoise-soft);
+    font-size:14px;
+    cursor:pointer;
+    margin-bottom:34px;
+    border:1px solid rgba(47,167,158,0.35);
+    padding:8px 16px;
+    border-radius:999px;
+    transition:all .3s ease;
+  }
+  .back-link:hover{background:rgba(47,167,158,0.12); border-color:var(--turquoise-soft);}
+  .inner-title{
+    font-family:var(--font-display);
+    font-size:clamp(30px,5vw,48px);
+    color:var(--gold-soft);
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .inner-sub{
+    text-align:center;
+    color:var(--cream-dim);
+    font-size:14px;
+    margin-bottom:44px;
+  }
+  .poem-body{
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+  .beyt{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    padding:14px 0;
+    border-bottom:1px dashed rgba(201,162,75,0.22);
+    color:var(--cream);
+    font-size:16px;
+    line-height:2.1;
+  }
+  .beyt .mesra{flex:1; text-align:center;}
+  .poem-note{
+    max-width:720px;
+    margin:44px auto 0;
+    color:var(--cream-dim);
+    font-size:14px;
+    line-height:2;
+    text-align:center;
+  }
+  .poet-credit{
+    max-width:720px;
+    margin:50px auto 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .credit-line{
+    width:60px; height:1px;
+    background:var(--gold-soft);
+    opacity:0.5;
+  }
+  .credit-name{
+    font-family:var(--font-display);
+    font-size:21px;
+    color:var(--gold-soft);
+    letter-spacing:0.5px;
+  }
+
+  /* ================= BIOGRAPHY PAGE ================= */
+  .musician-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(210px,1fr));
+    gap:24px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  .musician-card{
+    background:linear-gradient(180deg, var(--bg-deep2), var(--bg-deep3));
+    border:1px solid rgba(201,162,75,0.22);
+    border-radius:16px;
+    padding:28px 20px;
+    text-align:center;
+    transition:transform .35s ease, border-color .35s ease;
+  }
+  .musician-card:hover{transform:translateY(-6px); border-color:var(--turquoise-soft);}
+  .musician-photo{
+    width:92px; height:92px;
+    border-radius:50%;
+    margin:0 auto 16px;
+  }
+  .musician-photo .placeholder-overlay svg{width:26px; height:26px;}
+  .musician-photo .placeholder-overlay span{font-size:10px; padding:0 10px;}
+  .musician-card h3{font-size:17px; color:var(--cream); margin-bottom:4px;}
+  .musician-card .instrument{color:var(--turquoise-soft); font-size:12.5px; margin-bottom:12px;}
+  .musician-card p{color:var(--cream-dim); font-size:13px; line-height:1.85;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:640px){
+    .site-nav{padding:14px 16px;}
+    .nav-links{gap:2px;}
+    .nav-link{padding:7px 12px; font-size:13px;}
+    .beyt{flex-direction:column; gap:6px; text-align:center;}
+    .performers-grid{grid-template-columns:1fr 1fr 1fr; gap:10px;}
+    .group-photo-frame{aspect-ratio:4/5; border-radius:14px;}
+  }
+  @media (max-width:420px){
+    .performers-grid{grid-template-columns:1fr; max-width:220px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="brand" onclick="goTo('home')">
+    <span class="brand-mark"></span>
+    شب سنتور و تار
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" data-target="home" onclick="goTo('home')">خانه</button>
+    <button class="nav-link" data-target="bio" onclick="goTo('bio')">بیوگرافی نوازندگان</button>
+  </div>
+</nav>
+
+<!-- ===================== HOME ===================== -->
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="strings" id="strings"></div>
+    <div class="hero-dome"></div>
+    <div class="eyebrow">یک شب با موسیقی سنتی ایران</div>
+    <h1>به کنسرت <span>گروه افلاکیان</span> خوش آمدید</h1>
+    <p class="lead">
+      ممنون که با حضور گرمتان ما را همراهی میکنید
+    </p>
+    <div class="hero-scroll-cue"></div>
+  </div>
+
+  <div class="khatam-divider"></div>
+
+  <div class="section" id="ensemble">
+    <div class="section-head">
+      <div class="eyebrow">گروه نوازندگان</div>
+      <h2>هنرمندان این شب</h2>
+      <p>تصویر گروهی ارکستر و نوازندگان اصلی</p>
+    </div>
+
+    <!-- عکس دسته‌جمعی نوازندگان — کافیست فایل را با همین نام در پوشهٔ images قرار دهید -->
+    <div class="photo-frame group-photo-frame">
+      <img src="images/group-photo.jpg" alt="عکس دسته‌جمعی نوازندگان"
+           onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+      <div class="placeholder-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-4 4-3-3-4 4"/></svg>
+        <span>عکس دسته‌جمعی نوازندگان<br>(images/group-photo.jpg)</span>
+      </div>
+    </div>
+
+    <!-- سه عکس نوازندگان اصلی — نام فایل‌ها را در پوشهٔ images جایگزین کنید -->
+    <div class="performers-grid">
+      <div>
+        <div class="photo-frame performer-photo">
+          <img src="images/performer-8.jpg" alt="مدرس تصنیف و آواز"
+               onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+          <div class="placeholder-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+            <span>اکرم حسینی (پرنیان)<br>(images/lead-1.jpg)</span>
+          </div>
+        </div>
+        <div class="performer-caption">
+          <span class="p-name">اکرم حسینی (پرنیان)</span>
+          <span class="p-role">مدرس تصنیف و آواز</span>
+        </div>
+      </div>
+      <div>
+        <div class="photo-frame performer-photo">
+          <img src="images/performer-1.jpg" alt="شاعر، آهنگساز و نوازندهٔ تار، سه‌تار و تنبور"
+               onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+          <div class="placeholder-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+            <span>بابک شریف<br>(images/lead-2.jpg)</span>
+          </div>
+        </div>
+        <div class="performer-caption">
+          <span class="p-name">بابک شریف</span>
+          <span class="p-role">شاعر، آهنگساز و نوازندهٔ تار، سه‌تار و تنبور</span>
+        </div>
+      </div>
+      <div>
+        <div class="photo-frame performer-photo">
+          <img src="images/performer-4.jpg" alt="خواننده، ترانه‌سرا و آهنگساز"
+               onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+          <div class="placeholder-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+            <span>صدرا شریف<br>(images/lead-3.jpg)</span>
+          </div>
+        </div>
+        <div class="performer-caption">
+          <span class="p-name">صدرا شریف</span>
+          <span class="p-role">خواننده، ترانه‌سرا و آهنگساز</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="khatam-divider"></div>
+
+  <div class="section" id="poems">
+    <div class="section-head">
+      <div class="eyebrow">برنامه اجرا</div>
+      <h2>اشعار این شب</h2>
+      <p>هر بخش از برنامه با یکی از قطعات همراه است. برای مشاهدهٔ متن هر شعر روی کارت مربوطه بزنید.</p>
+    </div>
+    <div class="poem-grid">
+      <div class="poem-arch" onclick="goTo('poem1')"><span class="num">۱</span><span class="label">ازل</span></div>
+      <div class="poem-arch" onclick="goTo('poem2')"><span class="num">۲</span><span class="label">صور</span></div>
+      <div class="poem-arch" onclick="goTo('poem3')"><span class="num">۳</span><span class="label">کوزه‌گر</span></div>
+      <div class="poem-arch" onclick="goTo('poem4')"><span class="num">۴</span><span class="label">دردی کش</span></div>
+      <div class="poem-arch" onclick="goTo('poem5')"><span class="num">۵</span><span class="label">شراب افلاک</span></div>
+    </div>
+  </div>
+
+  <div class="khatam-divider"></div>
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="photo-frame footer-logo">
+        <img src="images/company-logo.png" alt="لوگوی شرکت AA Technology"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-4 4-3-3-4 4"/></svg>
+        </div>
+      </div>
+      <div class="footer-text">
+        <p class="tagline">این کنسرت سه‌شنبه ۲۷ مرداد، ساعت ۱۹ تا ۲۱ برگزار می‌شود</p>
+        <p class="copyright">© <span id="year"></span> تمامی حقوق این وب‌سایت محفوظ است. طراحی و توسعه توسط <strong>شرکت AA Technology</strong></p>
+      </div>
+    </div>
+  </footer>
+</section>
+
+<!-- ===================== POEM PAGES ===================== -->
+<!-- Generated via template below by JS-free repetition -->
+<section id="poem1" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">ازل</h1>
+  <p class="inner-sub">همراه با نوای سنتور</p>
+  <div class="poem-body">
+    <div class="beyt"><span class="mesra">در کمین من اگر بنشستند</span><span class="mesra">از ازل می‌گذرم</span></div>
+    <div class="beyt"><span class="mesra">من هنوز طفلم و پایم در گریز</span><span class="mesra">از ابد میگذرم</span></div>
+    <div class="beyt"><span class="mesra">از ازل تا به ابد ، مست و چموش</span><span class="mesra">من خرامانم و ، بد میگذرم</span></div>
+    <div class="beyt"><span class="mesra">تو کجا دیدی که من نیست شدم</span><span class="mesra">یا کجا دیدی که چون میگذرم !</span></div>
+    <div class="beyt"><span class="mesra">در گذرگاه ازل ، هست شدم</span><span class="mesra">از ابد چون گذرم ، نی گذرم</span></div>
+    <div class="beyt"><span class="mesra">از ازل برزخم و تا ابدم در برزخ</span><span class="mesra">کی ؟ کجا ؟دیدی که من میگذرم ؟</span></div>
+    <div class="beyt"><span class="mesra">از ازل تا به ابد ، دم یک دم است</span><span class="mesra">من دمادم از ازل میگذرم</span></div>
+  </div>
+  <div class="poet-credit">
+    <span class="credit-line"></span>
+    <span class="credit-name">بابک شریف</span>
+  </div>
+</section>
+
+<section id="poem2" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">صور</h1>
+  <p class="inner-sub">همراه با نوای تار</p>
+  <div class="poem-body">
+    <div class="beyt"><span class="mesra">بدم آن صور که مشتاق رحیلت اینجاست</span><span class="mesra">تن من در قفس و جان دخیلت اینجاست</span></div>
+    <div class="beyt"><span class="mesra">بدم آن صور که من رقص کنان خواهم رفت</span><span class="mesra">فارغ از کون و مکان دست فشان خواهم رفت</span></div>
+    <div class="beyt"><span class="mesra">فانی خاک تن من بدنم خواهد بود</span><span class="mesra">خوش ترین رنگ لباسم کفنم خواهد بود</span></div>
+    <div class="beyt"><span class="mesra">که بر آن نقش پر از شعر و پر از نور زنید</span><span class="mesra">دف زنید بر سر خاک همره تنبور زنید</span></div>
+    <div class="beyt"><span class="mesra">بر مزارم کس نخواند تلقین</span><span class="mesra">آن رحیل قاصد عشق ست به یقین</span></div>
+    <div class="beyt"><span class="mesra">هر امامی که بخود بشناسم از عشق است</span><span class="mesra">من خدایم عشق است من ندایم عشق است</span></div>
+    <div class="beyt"><span class="mesra">پس بخوانید و به چغانه زنید</span><span class="mesra">از سر شوق همی باده مستانه زنید</span></div>
+    <div class="beyt"><span class="mesra">او که رفت قاصد عشق ست به یقین</span><span class="mesra">اودگر جای ندارد به زمین</span></div>
+    <div class="beyt"><span class="mesra">کل کشید و هی زنید و دف زنید</span><span class="mesra">هو کشید پا زنید و کف زنید</span></div>
+  </div>
+  <div class="poet-credit">
+    <span class="credit-line"></span>
+    <span class="credit-name">بابک شریف</span>
+  </div>
+</section>
+
+<section id="poem3" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">کوزه‌گر</h1>
+  <p class="inner-sub">همراه با نوای سه‌تار</p>
+  <div class="poem-body">
+    <div class="beyt"><span class="mesra">تن من در خاک و گردم در هواست</span><span class="mesra">خاک من سرمه به چشم کبریاست</span></div>
+    <div class="beyt"><span class="mesra">کوزه گر کوزه بساز از خاک من</span><span class="mesra">دست و سر کن کوزه را این گل طلاست</span></div>
+    <div class="beyt"><span class="mesra">گر بسازی جامی از خاک تنم</span><span class="mesra">هر چه ریزی چون شرابی دلرباست</span></div>
+    <div class="beyt"><span class="mesra">هرکه گیرد کوزه ام در دست خود</span><span class="mesra">لب نهد بر جام من او آشناست</span></div>
+    <div class="beyt"><span class="mesra">قلب من دانی کجای کوزه است</span><span class="mesra">چون بیافتد بشکند بینی کجاست</span></div>
+    <div class="beyt"><span class="mesra">کوزه گر سودای بازارت منم</span><span class="mesra">چون فراوان در در این جام طلاست</span></div>
+    <div class="beyt"><span class="mesra">کوزه گر نفروش من حیف از منست</span><span class="mesra">گر ز کف دادی مرا آنگه خطاست</span></div>
+    <div class="beyt"><span class="mesra">من در این ایوان بمانم در سکوت</span><span class="mesra">چون از آن دیگران گردم جفاست</span></div>
+    <div class="beyt"><span class="mesra">گهی با فوت خود گردم زدا</span><span class="mesra">غنچه کن لب را به سمتم که به جاست</span></div>
+    <div class="beyt"><span class="mesra">لحظه آخر در آغوشم بگیر</span><span class="mesra">آرزویم دادن جان در خفاست</span></div>
+    <div class="beyt"><span class="mesra">زنده کن بار دگر این مرده را</span><span class="mesra">مستحقم چون کنی بر من رواست</span></div>
+  </div>
+  <div class="poet-credit">
+    <span class="credit-line"></span>
+    <span class="credit-name">بابک شریف</span>
+  </div>
+</section>
+
+<section id="poem4" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">دردی کش</h1>
+  <p class="inner-sub">اجرای گروهی نوازندگان</p>
+  <div class="poem-body">
+    <div class="beyt"><span class="mesra">در ره عشق مردم و دیدم که مرگ بیگانه نیست</span><span class="mesra">در میان عاشقان ، برزخ کم از میخانه نیست</span></div>
+    <div class="beyt"><span class="mesra">عاشقان در برزخ و دیدم هزاران مست را</span><span class="mesra">جز من اما هیچکس دردی کش خمخانه نیست</span></div>
+    <div class="beyt"><span class="mesra">مست بسیار دیدم و واله و حیران و در آن</span><span class="mesra">همچو من دیوانه وار اما کسی مستانه نیست</span></div>
+    <div class="beyt"><span class="mesra">هرکسی پر می‌گشود آنجا، پران بر گرد یار</span><span class="mesra">لیک چون من خسته ای پروانه وار در لانه نیست</span></div>
+    <div class="beyt"><span class="mesra">آنچه ایشان را پریشان کرده بود آن عشق بود</span><span class="mesra">حیف نادانند که عشق برتر ز آن جانانه نیست</span></div>
+    <div class="beyt"><span class="mesra">شرط اول چون قدم در راه عشق پاک می‌نهند</span><span class="mesra">این بشر را تاب افزونتر ز عشق بر شانه نیست</span></div>
+    <div class="beyt"><span class="mesra">چون خمیر انس را در عرش با گل می زدند</span><span class="mesra">هرگزش بیش طاقت تاوان در این طی خانه نیست</span></div>
+    <div class="beyt"><span class="mesra">منکه این غوغای جانان را نمی دانم ولی</span><span class="mesra">کس نمیداند ورای جان آن فرزانه چیست</span></div>
+  </div>
+  <div class="poet-credit">
+    <span class="credit-line"></span>
+    <span class="credit-name">بابک شریف</span>
+  </div>
+</section>
+
+<section id="poem5" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">شراب افلاک</h1>
+  <p class="inner-sub">قطعه پایانی کنسرت</p>
+  <div class="poem-body">
+    <div class="beyt"><span class="mesra">تنم ز خاک و روحم از خاک نیست</span><span class="mesra">روح، ولی تهی ز خاشاک نیست</span></div>
+    <div class="beyt"><span class="mesra">دو روزی پر بسته‌ و زارم ولی</span><span class="mesra">چاره جان جز ره افلاک نیست</span></div>
+    <div class="beyt"><span class="mesra">جرعه ای انگور اگر خورده‌ام،</span><span class="mesra">مستیِ من ز باده ی تاک نیست</span></div>
+    <div class="beyt"><span class="mesra">با دل من چه کرده‌ای، خدایا</span><span class="mesra">ز مرگ من ، کمی مرا باک نیست</span></div>
+    <div class="beyt"><span class="mesra">مستی محال است که درمان کند،</span><span class="mesra">چاره در این تلخیِ تریاک نیست</span></div>
+    <div class="beyt"><span class="mesra">من ز گنهکاری خود خسته‌ام،</span><span class="mesra">مست، که بر مرکب ادراک نیست</span></div>
+    <div class="beyt"><span class="mesra">گذر کن از گور، که آنجا نیم،</span><span class="mesra">گور به جز خفته ی در خاک نیست</span></div>
+    <div class="beyt"><span class="mesra">باده زدم مست شدم من ولی</span><span class="mesra">باده بجز شراب افلاک نیست</span></div>
+  </div>
+  <div class="poet-credit">
+    <span class="credit-line"></span>
+    <span class="credit-name">بابک شریف</span>
+  </div>
+</section>
+
+<!-- ===================== BIOGRAPHY PAGE ===================== -->
+<section id="bio" class="page inner-page">
+  <div class="back-link" onclick="goTo('home')">→ بازگشت به صفحه اصلی</div>
+  <h1 class="inner-title">بیوگرافی نوازندگان</h1>
+  <p class="inner-sub">آشنایی با ۱۲ عضو گروه</p>
+  <div class="musician-grid">
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-1.jpg" alt="شاعر، آهنگساز و نوازندهٔ تار، سه‌تار و تنبور"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-1.jpg</span>
+        </div>
+      </div>
+      <h3>بابک شریف</h3>
+      <div class="instrument">شاعر، آهنگساز و نوازندهٔ تار، سه‌تار و تنبور</div>
+      <p>فعالیت موسیقایی خود را از سال ۱۳۷۰ آغاز کرد و در محضر اساتید داریوش طلایی و داریوش پیرنیاکان به فراگیری ساز پرداخت.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-2.jpg" alt="نوازندهٔ سنتور"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-2.jpg</span>
+        </div>
+      </div>
+      <h3>محمدرضا کشاورز</h3>
+      <div class="instrument">نوازندهٔ سنتور</div>
+      <p>متولد ۱۳۴۶، آشنایی‌اش با سنتور از سال ۱۳۶۵ آغاز شد و در کلاس‌های آموزشی اساتید جواد بطحایی، رضا شفیعیان و سعید ثابت شرکت کرد.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-3.jpg" alt="تنظیم‌کننده و مدرس نی"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-3.jpg</span>
+        </div>
+      </div>
+      <h3>داریوش قانع</h3>
+      <div class="instrument">تنظیم‌کننده و مدرس نی</div>
+      </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-4.jpg" alt="خواننده، ترانه‌سرا و آهنگساز"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-4.jpg</span>
+        </div>
+      </div>
+      <h3>صدرا شریف</h3>
+      <div class="instrument">خواننده، ترانه‌سرا و آهنگساز</div>
+      <p>پیانیست و گیتاریست، نوازندهٔ سازهای کوبه‌ای و تنظیم‌کننده.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-5.jpg" alt="نوازندهٔ تار و سه‌تار"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-5.jpg</span>
+        </div>
+      </div>
+      <h3>فرید صادقی</h3>
+      <div class="instrument">نوازندهٔ تار و سه‌تار</div>
+      <p>دارای مدرک لیسانس موسیقی و هنرآموختهٔ اساتید داریوش طلایی و داریوش پیرنیاکان.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-6.jpg" alt="آهنگساز و نوازندهٔ دف"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-6.jpg</span>
+        </div>
+      </div>
+      <h3>پوریا جهانبخش</h3>
+      <div class="instrument">آهنگساز و نوازندهٔ دف</div>
+      </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-7.jpg" alt="نوازندهٔ تار"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-7.jpg</span>
+        </div>
+      </div>
+      <h3>احمد خوانساری</h3>
+      <div class="instrument">نوازندهٔ تار</div>
+      <p>متولد ۱۳۶۲، با سابقهٔ حدود دو سال نوازندگی، آموزش‌دیدهٔ استاد بابک شریف.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-8.jpg" alt="مدرس تصنیف و آواز"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-8.jpg</span>
+        </div>
+      </div>
+      <h3>اکرم حسینی (پرنیان)</h3>
+      <div class="instrument">مدرس تصنیف و آواز</div>
+      <p>دوره‌های آوازی را به مدت ده سال نزد استاد حوروش خلیلی، استاد منتشری، استاد فرنگیس یاوری و فریبا داودی آموزش دیده است.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-9.jpg" alt="نوازنده و مدرس موسیقی"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-9.jpg</span>
+        </div>
+      </div>
+      <h3>بهنوش کاظمی‌زاده</h3>
+      <div class="instrument">نوازنده و مدرس موسیقی</div>
+      <p>آموزش‌دیدهٔ اساتید بیژن کامکار، سعید فرج‌پوری و رضا پرویززاده. همکاری با گروه‌های مختلف در ضبط و اجرا، و فعالیت در زمینهٔ موسیقی نمایش از سال ۱۳۷۹ تاکنون؛ عضو انجمن موسیقی خانهٔ تئاتر.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-10.jpg" alt="نوازندهٔ تنبک"
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-10.jpg</span>
+        </div>
+      </div>
+      <h3>زهره گل‌محمدی</h3>
+      <div class="instrument">نوازندهٔ تنبک</div>
+      <p>از سال ۱۳۷۲ نزد استاد محمد قدسی، از شاگردان استاد بهمن رجبی، فراگیری ساز تنبک را آغاز کرد.</p>
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-11.jpg" alt="شهره طالقانی "
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-11.jpg</span>
+        </div>
+      </div>
+      <h3>شهره طالقانی </h3>
+      <div class="instrument">نوازنده ساز سه تار</div>
+      
+    </div>
+    <div class="musician-card">
+      <div class="photo-frame musician-photo">
+        <img src="images/performer-12.jpg" alt="مائده بهار "
+             onerror="this.style.display='none'; this.closest('.photo-frame').classList.add('img-missing')">
+        <div class="placeholder-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--gold-soft)"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <span>images/performer-12.jpg</span>
+        </div>
+      </div>
+      <h3>مائده بهار </h3>
+      <div class="instrument">نوازنده ساز دف</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // build shimmering santur strings
+  const stringsWrap = document.getElementById('strings');
+  const STRING_COUNT = 22;
+  for(let i=0;i<STRING_COUNT;i++){
+    const s = document.createElement('span');
+    s.style.animationDelay = (Math.random()*3.6).toFixed(2)+'s';
+    stringsWrap.appendChild(s);
+  }
+
+  // fill current year in footer copyright
+  const yearEl = document.getElementById('year');
+  if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+  function goTo(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(l=>{
+      l.classList.toggle('is-active', l.dataset.target === id);
+    });
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    try{ history.replaceState(null, '', '#'+id); }catch(e){ /* blocked in sandboxed preview — safe to ignore */ }
+  }
+
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const hash = location.hash.replace('#','');
+    const valid = ['home','bio','poem1','poem2','poem3','poem4','poem5'];
+    if(valid.includes(hash)) goTo(hash);
+  });
+  window.addEventListener('hashchange', ()=>{
+    const hash = location.hash.replace('#','');
+    const valid = ['home','bio','poem1','poem2','poem3','poem4','poem5'];
+    if(valid.includes(hash)) goTo(hash);
+  });
+</script>
+
+</body>
+</html>
